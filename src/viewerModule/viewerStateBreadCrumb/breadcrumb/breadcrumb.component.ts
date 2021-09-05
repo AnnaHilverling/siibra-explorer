@@ -105,6 +105,36 @@ export class ViewerStateBreadCrumb {
     )
   }
 
+  //ToDo just copy pasted from viewerCtrlCmp.component.ts. and hides all the visible layers
+  // if we keep the feature need service or action
+  private hiddenLayerNames: string[] = []
+  public delinHidden = false
+  public toggleParcVsbl(parc){
+    const visibleParcLayers = ((window as any).viewer.layerManager.managedLayers)
+      .slice(1)
+      .filter(({ visible }) => visible)
+
+    if (this.delinHidden) {
+      this.delinHidden = false
+      for (const name of this.hiddenLayerNames) {
+        const l = (window as any).viewer.layerManager.getLayerByName(name)
+        l && l.setVisible(true)
+      }
+      this.hiddenLayerNames = []
+    } else {
+      this.delinHidden = true
+      for (const {name} of visibleParcLayers) {
+        const l = (window as any).viewer.layerManager.getLayerByName(name)
+        l && l.setVisible(false)
+        this.hiddenLayerNames.push(name)
+      }
+    }
+
+    setTimeout(() => {
+      (window as any).viewer.display.scheduleRedraw()
+    })
+  }
+
   public bindFns(fns){
     return () => {
       for (const [ fn, ...arg] of fns) {

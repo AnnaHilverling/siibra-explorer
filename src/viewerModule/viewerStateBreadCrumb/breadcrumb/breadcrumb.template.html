@@ -32,6 +32,8 @@
         <ng-container *ngTemplateOutlet="chipTmpl; context: {
           parcel: p,
           selected: true,
+          canHide: true,
+          hidden: delinHidden,
           dismissable: true,
           ariaLabel: ARIA_LABELS.PARC_VER_SELECT,
           onclick: layerVersionMenuTrigger.toggleMenu.bind(layerVersionMenuTrigger)
@@ -46,6 +48,8 @@
           parcel: parc,
           selected: false,
           dismissable: false,
+          canHide: true,
+          hidden: delinHidden,
           ariaLabel: ARIA_LABELS.PARC_VER_SELECT,
           onclick: layerVersionMenuTrigger.toggleMenu.bind(layerVersionMenuTrigger)
         }">
@@ -167,6 +171,8 @@
   let-parcel="parcel"
   let-selected="selected"
   let-dismissable="dismissable"
+  let-canHide="canHide"
+  let-hidden="hidden"
   let-chipClass="class"
   let-ariaLabel="ariaLabel"
   let-onclick="onclick">
@@ -194,6 +200,13 @@
       </mat-icon>
 
     </ng-container>
+
+    <mat-icon
+            *ngIf="canHide"
+            (click)="toggleParcVsbl(parcel); $event.stopPropagation()"
+            fontSet="far"
+            [fontIcon]="!hidden? 'fa-eye' : 'fa-eye-slash'">
+    </mat-icon>
 
     <!-- dismiss icon -->
     <mat-icon
